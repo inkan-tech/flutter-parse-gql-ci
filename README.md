@@ -1,16 +1,23 @@
 # sparse_gql_ci
 
-A new Flutter project.
+A Flutter project that aims to provide a simple code/demo to achieve the following:
 
-## Getting Started
+- Login/Signup/logout state-managed
+- Sparse Back4app backend using GraphQL > 5.0 module
+- Tests of the functions
+- CI/CD of the tests
 
-This project is a starting point for a Flutter application.
+## Motivation
 
-A few resources to get you started if this is your first Flutter project:
+Despite looking for an existing example, I could only find outdated ones for GraphQL 3.0.0 with incompatibilities, no complete end to end, especially no tests and CI/CD.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Kudos to https://github.com/shubie/flutter-thursday-login-registration.git for the initial code
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## How to use this example 
+
+
+Idea is to use environment variables to set access to B4APP to ease CI/CD 
+https://github.com/TatsuUkraine/flutter_define_example
+https://github.com/marketplace/actions/flutter-action for github actions
+
+Latter: check this https://itnext.io/flutter-1-17-no-more-flavors-no-more-ios-schemas-command-argument-that-solves-everything-8b145ed4285d 
