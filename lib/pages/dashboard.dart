@@ -23,7 +23,7 @@ class _DashBoardState extends State<DashBoard> {
           SizedBox(
             height: 100,
           ),
-          Center(child: Text(user.email)),
+          Center(child: Text(user.email as String)),
           SizedBox(height: 100),
           RaisedButton(
             onPressed: () {},

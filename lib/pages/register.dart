@@ -1,4 +1,4 @@
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import '../domain/user.dart';
 import '../providers/auth.dart';
@@ -15,7 +15,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final formKey = new GlobalKey<FormState>();
 
-  String _username, _password, _confirmPassword;
+  String? _username, _password, _confirmPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +31,14 @@ class _RegisterState extends State<Register> {
     final passwordField = TextFormField(
       autofocus: false,
       obscureText: true,
-      validator: (value) => value.isEmpty ? "Please enter password" : null,
+      validator: (value) => value!.isEmpty ? "Please enter password" : null,
       onSaved: (value) => _password = value,
       decoration: buildInputDecoration("Confirm password", Icons.lock),
     );
 
     final confirmPassword = TextFormField(
       autofocus: false,
-      validator: (value) => value.isEmpty ? "Your password is required" : null,
+      validator: (value) => value!.isEmpty ? "Your password is required" : null,
       onSaved: (value) => _confirmPassword = value,
       obscureText: true,
       decoration: buildInputDecoration("Confirm password", Icons.lock),
@@ -52,31 +52,31 @@ class _RegisterState extends State<Register> {
       ],
     );
 
-    var doRegister = () {
-      final form = formKey.currentState;
-      if (form.validate()) {
-        form.save();
-        auth.register(_username, _password, _confirmPassword).then((response) {
-          if (response['status']) {
-            User user = response['data'];
-            Provider.of<UserProvider>(context, listen: false).setUser(user);
-            Navigator.pushReplacementNamed(context, '/dashboard');
-          } else {
-            Flushbar(
-              title: "Registration Failed",
-              message: response.toString(),
-              duration: Duration(seconds: 10),
-            ).show(context);
-          }
-        });
-      } else {
-        Flushbar(
-          title: "Invalid form",
-          message: "Please Complete the form properly",
-          duration: Duration(seconds: 10),
-        ).show(context);
-      }
-    };
+    // var doRegister = () {
+    //   final form = formKey.currentState;
+    //   if (form!.validate()) {
+    //     form.save();
+    //     auth.register(_username, _password, _confirmPassword).then((response) {
+    //       if (response['status']) {
+    //         User user = response['data'];
+    //         Provider.of<UserProvider>(context, listen: false).setUser(user);
+    //         Navigator.pushReplacementNamed(context, '/dashboard');
+    //       } else {
+    //         Flushbar(
+    //           title: "Registration Failed",
+    //           message: response.toString(),
+    //           duration: Duration(seconds: 10),
+    //         ).show(context);
+    //       }
+    //     });
+    //   } else {
+    //     Flushbar(
+    //       title: "Invalid form",
+    //       message: "Please Complete the form properly",
+    //       duration: Duration(seconds: 10),
+    //     ).show(context);
+    //   }
+    // };
 
     return SafeArea(
       child: Scaffold(
@@ -99,10 +99,10 @@ class _RegisterState extends State<Register> {
                 label("Confirm Password"),
                 SizedBox(height: 10.0),
                 confirmPassword,
-                SizedBox(height: 20.0),
-                auth.loggedInStatus == Status.Authenticating
-                    ? loading
-                    : longButtons("Login", doRegister),
+                // SizedBox(height: 20.0),
+                // auth.loggedInStatus == Status.Authenticating
+                //     ? loading
+                //     : longButtons("Login", doRegister),
               ],
             ),
           ),

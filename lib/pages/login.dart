@@ -1,9 +1,9 @@
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import '../domain/user.dart';
 import '../providers/auth.dart';
 import '../providers/user_provider.dart';
-import '../util/validators.dart';
+// import '../util/validators.dart';
 import '../util/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +15,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final formKey = new GlobalKey<FormState>();
 
-  String _username = "", _password ="";
+  String _username = "", _password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +23,16 @@ class _LoginState extends State<Login> {
 
     final usernameField = TextFormField(
       autofocus: false,
-      validator: validateEmail,
-      onSaved: (value) => _username = value,
-      decoration: buildInputDecoration("Confirm password", Icons.email),
+      //  validator: validateEmail,
+      onSaved: (value) => _username = value as String,
+      decoration: buildInputDecoration("Confirm password", Icons.person),
     );
 
     final passwordField = TextFormField(
       autofocus: false,
       obscureText: true,
-      validator: (value) => value.isEmpty ? "Please enter password" : null,
-      onSaved: (value) => _password = value,
+      validator: (value) => value!.isEmpty ? "Please enter password" : null,
+      onSaved: (value) => _password = value as String,
       decoration: buildInputDecoration("Confirm password", Icons.lock),
     );
 
@@ -68,7 +68,7 @@ class _LoginState extends State<Login> {
     var doLogin = () {
       final form = formKey.currentState;
 
-      if (form.validate()) {
+      if (form!.validate()) {
         form.save();
 
         final Future<Map<String, dynamic>> successfulMessage =
@@ -82,7 +82,7 @@ class _LoginState extends State<Login> {
           } else {
             Flushbar(
               title: "Failed Login",
-              message: response['message']['message'].toString(),
+              message: response['message'].toString(),
               duration: Duration(seconds: 3),
             ).show(context);
           }
@@ -102,7 +102,7 @@ class _LoginState extends State<Login> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 15.0),
-                label("Email"),
+                label("Username"),
                 SizedBox(height: 5.0),
                 usernameField,
                 SizedBox(height: 20.0),

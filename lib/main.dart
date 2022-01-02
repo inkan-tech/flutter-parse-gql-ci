@@ -62,7 +62,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // UserData is using the shared preferences module
-  Future<User> getUserData() => UserPreferences().getUser();
+  Future<User?> getUserData() => UserPreferences().getUser();
 
   String? name;
   String? saveFormat;
@@ -84,24 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   ///THIS IS A SAMPLE FOR MAKING MUTABLE REQUEST
 
-  static String loginQuery = '''
-    mutation LogIn{
-      logIn(input: {
-        username: "test",
-        password: "testtest"
-      }){
-        viewer{
-          sessionToken
-          user { 
-           objectId
-           id
-           emailVerified
-          }
-        }
-      }
-    }
-    ''';
-
 /////// check https://blog.logrocket.com/using-graphql-with-flutter-a-tutorial-with-examples/
   @override
   Widget build(BuildContext context) {
@@ -114,12 +96,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 case ConnectionState.waiting:
                   return CircularProgressIndicator();
                 default:
-                  if (snapshot.hasError)
+                  if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
-                  else if (!snapshot.hasData) if (snapshot.data == null)
-                    return Login();
-                  else
-                    UserPreferences().removeUser();
+                  } else {
+                    if ((snapshot.hasData && snapshot.data == null) ||
+                        (!snapshot.hasData)) {
+                      return Login();
+                    } else {
+                      UserPreferences().removeUser();
+                    }
+                  }
                   return Welcome(user: snapshot.data as User);
               }
             }));
