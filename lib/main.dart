@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'pages/dashboard.dart';
 import 'pages/login.dart';
+import 'pages/logout.dart';
 import 'pages/register.dart';
-import 'pages/welcome.dart';
 import 'providers/auth.dart';
 import 'providers/user_provider.dart';
 import 'util/shared_preference.dart';
@@ -17,10 +17,12 @@ void main() async {
   // We're using HiveStore for persistence,
   // so we need to initialize Hive.
   await initHiveForFlutter();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final HttpLink httpLink = HttpLink(kParseApiUrl, defaultHeaders: {
@@ -50,6 +52,7 @@ class MyApp extends StatelessWidget {
             '/dashboard': (context) => DashBoard(),
             '/login': (context) => Login(),
             '/register': (context) => Register(),
+            '/logout': (context) => Logout(),
           }),
     );
   }
@@ -67,20 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
   String? name;
   String? saveFormat;
   String? objectId;
-
-  static String query = '''
-  query FindHero {
-    heroes{
-      count,
-      edges{
-        node{
-          name
-          height
-        }
-      }
-    }
-  }
-  ''';
 
   ///THIS IS A SAMPLE FOR MAKING MUTABLE REQUEST
 
@@ -106,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       UserPreferences().removeUser();
                     }
                   }
-                  return Welcome(user: snapshot.data as User);
+                  return DashBoard();
               }
             }));
   }

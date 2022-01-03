@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import '../domain/user.dart';
-import '../util/app_url.dart';
 import '../util/shared_preference.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../constants.dart';
@@ -40,7 +39,6 @@ class AuthProvider with ChangeNotifier {
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
 
-    ///THIS IS A SAMPLE FOR MAKING MUTABLE REQUEST
     String loginMutate = '''
       mutation LogIn(\$username: String!, \$password: String!){
         logIn(input: {username: \$username, password: \$password}) {
@@ -94,6 +92,14 @@ class AuthProvider with ChangeNotifier {
     return result;
   }
 
+  /// see https://www.back4app.com/docs/parse-graphql/graphql-logout-mutation
+  String logoutMutate = ''' mutation logOutButton {
+	logOut(input: { clientMutationId: "6pgfR7vt38" }) {
+		clientMutationId
+	}
+}
+''';
+
   // Future<Map<String, dynamic>> register(
   //     String? email, String? password, String? passwordConfirmation) async {
   //   final Map<String, dynamic> registrationData = {
@@ -103,6 +109,24 @@ class AuthProvider with ChangeNotifier {
   //       'password_confirmation': passwordConfirmation
   //     }
   //   };
+  String signupMutation =
+      '''mutation SignUp(\$username: String!, \$password: String!, \$email: String!){
+  signUp(input: {
+    fields: {
+      username: \$username
+      password: \$password
+      email: \$email
+    }
+  }){
+    viewer{
+      user{
+        id
+        createdAt
+      }
+      sessionToken
+    }
+  }
+  }''';
   //   return await post(AppUrl.register,
   //           body: json.encode(registrationData),
   //           headers: {'Content-Type': 'application/json'})

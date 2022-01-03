@@ -9,9 +9,10 @@ class UserPreferences {
     prefs.setString("userId", user.userId as String);
     prefs.setString("email", user.email as String);
     prefs.setString("token", user.token as String);
+    prefs.setBool("emailVerified", user.emailVerified as bool);
+    prefs.setString("sessionId", user.sessionId as String);
 
-    print("object prefere");
-    print(user.token);
+    print("object prefered: " + user.toString());
 
     return prefs.commit();
   }
@@ -20,22 +21,26 @@ class UserPreferences {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String? userId = prefs.getString("userId");
-    String? email = prefs.getString("email" as String);
-    String? token = prefs.getString("token" as String);
+    String? email = prefs.getString("email");
+    String? token = prefs.getString("token");
+    bool? emailVerified = prefs.getBool("emailVerified");
+    String? seesionId = prefs.getString("sessionId");
 
     if (userId != null) {
-      return User(userId: userId, email: email, token: token);
+      return User(
+          userId: userId,
+          email: email,
+          token: token,
+          emailVerified: emailVerified,
+          sessionId: seesionId);
     } else {
       return null;
     }
   }
 
-  void removeUser() async {
+  Future<bool> removeUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.remove("userID");
-    prefs.remove("email");
-    prefs.remove("token");
+    return prefs.clear();
   }
 
   Future<String> getToken(args) async {

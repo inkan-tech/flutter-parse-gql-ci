@@ -23,10 +23,15 @@ class _DashBoardState extends State<DashBoard> {
           SizedBox(
             height: 100,
           ),
-          Center(child: Text(user.email as String)),
+          Center(
+              child: Text((user.email != null
+                  ? user.email as String
+                  : "not logged in"))),
           SizedBox(height: 100),
           RaisedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/logout');
+            },
             child: Text("Logout"),
             color: Colors.lightBlueAccent,
           )
