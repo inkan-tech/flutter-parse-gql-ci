@@ -14,7 +14,6 @@ class GraphQlConfiguration {
     if (sessionToken != null) {
       httpLink.defaultHeaders['X-Parse-Session-Token'] = sessionToken;
     }
-    ;
 
     return GraphQLClient(
       cache: GraphQLCache(store: HiveStore()),

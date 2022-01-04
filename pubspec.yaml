@@ -31,7 +31,9 @@ dependencies:
   provider: ^6.0.2
   graphql_flutter: ^5.0.0
   shared_preferences: ^2.0.11
+  ## using a nullsafe version
   another_flushbar: ^1.10.28
+  email_validator: ^2.0.1
   
 dev_dependencies:
   integration_test:

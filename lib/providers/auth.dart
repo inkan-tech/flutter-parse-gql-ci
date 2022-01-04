@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import '../domain/user.dart';
 import '../util/shared_preference.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import '../constants.dart';
 import '../graphql-configurator.dart';
 
 enum Status {
@@ -28,13 +26,6 @@ class AuthProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     Future<Map<String, dynamic>> result;
-
-    final Map<String, dynamic> loginData = {
-      'input': {'username': username, 'password': password}
-    };
-    final variables = {
-      "input": {"username": username, "password": password}
-    };
 
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
@@ -66,74 +57,111 @@ class AuthProvider with ChangeNotifier {
     if (loginResult.hasException) {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
-      result = new Future<Map<String, dynamic>>.value(
+      result = Future<Map<String, dynamic>>.value(
           {'status': false, 'message': loginResult.exception!.toString()});
-      ;
     } else {
-// <      final Map<String, dynamic> responseData =
-//           json.decode(loginResult.data.toString());
+      // get UserData directly from user: under viewer
       var userData = loginResult.data!['logIn']['viewer']['user'];
+      // add the sessionToken
       userData['token'] = loginResult.data!['logIn']['viewer']['sessionToken'];
-      print("userdata:" + userData.toString());
+      // transform in the right format
       User authUser = User.fromJson(userData);
-
+      // Save the user in the sharedPreferences
       UserPreferences().saveUser(authUser);
-      print(loginResult.data!['logIn']['viewer']);
 
-      _loggedInStatus = Status.LoggedIn;
+      if (authUser.emailVerified == true) {
+        _loggedInStatus = Status.LoggedIn;
+        result = Future<Map<String, dynamic>>.value({
+          'status': true,
+          'message': 'Logged in successfully',
+          'user': authUser
+        });
+      } else {
+        // Use status registering for after Signup but email not verified.
+        _loggedInStatus = Status.Registering;
+        result = Future<Map<String, dynamic>>.value({
+          'status': false,
+          'message': 'Please verify your email',
+          'user': authUser
+        });
+      }
+      // TODO: Add the session token to the graphql client
       notifyListeners();
-
-      result = new Future<Map<String, dynamic>>.value({
-        'status': true,
-        'message': 'Successful',
-        'user': authUser,
-      });
     }
     return result;
   }
 
-  /// see https://www.back4app.com/docs/parse-graphql/graphql-logout-mutation
-  String logoutMutate = ''' mutation logOutButton {
-	logOut(input: { clientMutationId: "6pgfR7vt38" }) {
-		clientMutationId
-	}
-}
-''';
+  /// Implement the signup function with a Mutation and a GraphQLClient
+  Future<Map<String, dynamic>> register(
+      String? username, String? email, String? password) async {
+    Future<Map<String, dynamic>> result;
+    _loggedInStatus = Status.Registering;
+    // ref:
+    String signupMutation =
+        '''mutation SignUp(\$username: String!, \$password: String!, \$email: String!)
+          {signUp(input: {
+            fields: {
+              username: \$username
+              password: \$password
+              email: \$email
+            }
+          }){
+            viewer{
+              user{
+                id
+                createdAt
+              }
+              sessionToken
+            }
+          }
+          }''';
 
-  // Future<Map<String, dynamic>> register(
-  //     String? email, String? password, String? passwordConfirmation) async {
-  //   final Map<String, dynamic> registrationData = {
-  //     'user': {
-  //       'email': email,
-  //       'password': password,
-  //       'password_confirmation': passwordConfirmation
-  //     }
-  //   };
-  String signupMutation =
-      '''mutation SignUp(\$username: String!, \$password: String!, \$email: String!){
-  signUp(input: {
-    fields: {
-      username: \$username
-      password: \$password
-      email: \$email
+    final QueryOptions options = QueryOptions(
+      document: gql(signupMutation),
+      variables: <String, dynamic>{
+        'username': username,
+        'password': password,
+        'email': email
+      },
+    );
+    GraphQLClient client = configuration.clientToQuery();
+
+    QueryResult signupResult = await client.query(options);
+    if (signupResult.hasException) {
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+      result = Future<Map<String, dynamic>>.value(
+          {'status': false, 'message': signupResult.exception!.toString()});
+    } else {
+      // TODO get the objectId linked with the token or getuser
+      // once logged in but might not be possible before emailVerified
+      // ..
+      var userData = {
+        'id': username,
+        'email': email,
+        'token': signupResult.data!['signUp']['viewer']['sessionToken'],
+        'emailVerified': false,
+        'objectId': ""
+      };
+
+      // transform in the right format
+      User authUser = User.fromJson(userData);
+      // Save the user in the sharedPreferences
+      UserPreferences().saveUser(authUser);
+
+      // Use status registering for after Signup but email not verified.
+      _loggedInStatus = Status.Registering;
+      result = Future<Map<String, dynamic>>.value({
+        'status': true,
+        'message': 'Please verify your email',
+        'user': authUser
+      });
+
+      // TODO: Add the session token to the graphql client
+      notifyListeners();
     }
-  }){
-    viewer{
-      user{
-        id
-        createdAt
-      }
-      sessionToken
-    }
+    return result;
   }
-  }''';
-  //   return await post(AppUrl.register,
-  //           body: json.encode(registrationData),
-  //           headers: {'Content-Type': 'application/json'})
-  //       .then(onValue)
-  //       .catchError(onError);
-  // }
-
 //   static Future<FutureOr> onValue(Response response) async {
 //     var result;
 //     final Map<String, dynamic> responseData = json.decode(response.body);
@@ -161,6 +189,17 @@ class AuthProvider with ChangeNotifier {
 
 //     return result;
 //   }
+
+  /// see https://www.back4app.com/docs/parse-graphql/graphql-logout-mutation
+  /// we can keep the id of the session which is different then the session.
+
+  String logoutMutate = ''' 
+  mutation logOutButton (\$objectId: String!) {
+	logOut(input: { clientMutationId: \$objectId }) {
+		clientMutationId
+  	}
+  }
+  ''';
 
   static onError(error) {
     print("the error is $error.detail");

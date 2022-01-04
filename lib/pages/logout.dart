@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+// TODO implement this
 class Logout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -7,8 +7,12 @@ class Logout extends StatelessWidget {
       body: Container(
         child: Center(
           child: Text("Thank You"),
+      
+                              
         ),
+        
       ),
     );
+    
   }
 }

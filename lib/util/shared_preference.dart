@@ -10,7 +10,7 @@ class UserPreferences {
     prefs.setString("email", user.email as String);
     prefs.setString("token", user.token as String);
     prefs.setBool("emailVerified", user.emailVerified as bool);
-    prefs.setString("sessionId", user.sessionId as String);
+    prefs.setString("objectId", user.objectId as String);
 
     print("object prefered: " + user.toString());
 
@@ -24,7 +24,7 @@ class UserPreferences {
     String? email = prefs.getString("email");
     String? token = prefs.getString("token");
     bool? emailVerified = prefs.getBool("emailVerified");
-    String? seesionId = prefs.getString("sessionId");
+    String? seesionId = prefs.getString("objectId");
 
     if (userId != null) {
       return User(
@@ -32,7 +32,7 @@ class UserPreferences {
           email: email,
           token: token,
           emailVerified: emailVerified,
-          sessionId: seesionId);
+          objectId: seesionId);
     } else {
       return null;
     }

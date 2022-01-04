@@ -4,6 +4,8 @@ import '../providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class DashBoard extends StatefulWidget {
+  const DashBoard({Key? key}) : super(key: key);
+
   @override
   _DashBoardState createState() => _DashBoardState();
 }
@@ -15,24 +17,24 @@ class _DashBoardState extends State<DashBoard> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("DASHBOARD PAGE"),
+        title: const Text("DASHBOARD PAGE"),
         elevation: 0.1,
       ),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 100,
           ),
           Center(
               child: Text((user.email != null
                   ? user.email as String
                   : "not logged in"))),
-          SizedBox(height: 100),
+          const SizedBox(height: 100),
           RaisedButton(
             onPressed: () {
               Navigator.pushReplacementNamed(context, '/logout');
             },
-            child: Text("Logout"),
+            child: const Text("Logout"),
             color: Colors.lightBlueAccent,
           )
         ],

@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import '../domain/user.dart';
 import '../providers/auth.dart';
 import '../providers/user_provider.dart';
-// import '../util/validators.dart';
 import '../util/widgets.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  final formKey = new GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   String _username = "", _password = "";
 
@@ -38,7 +39,7 @@ class _LoginState extends State<Login> {
 
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
+      children: const <Widget>[
         CircularProgressIndicator(),
         Text(" Authenticating ... Please wait")
       ],
@@ -48,16 +49,16 @@ class _LoginState extends State<Login> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         FlatButton(
-          padding: EdgeInsets.all(0.0),
-          child: Text("Forgot password?",
+          padding: const EdgeInsets.all(0.0),
+          child: const Text("Forgot password?",
               style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
 //            Navigator.pushReplacementNamed(context, '/reset-password');
           },
         ),
         FlatButton(
-          padding: EdgeInsets.only(left: 0.0),
-          child: Text("Sign up", style: TextStyle(fontWeight: FontWeight.w300)),
+          padding: const EdgeInsets.only(left: 0.0),
+          child: const Text("Sign up", style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/register');
           },
@@ -83,7 +84,7 @@ class _LoginState extends State<Login> {
             Flushbar(
               title: "Failed Login",
               message: response['message'].toString(),
-              duration: Duration(seconds: 3),
+              duration: const Duration(seconds: 3),
             ).show(context);
           }
         });
@@ -95,25 +96,25 @@ class _LoginState extends State<Login> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.all(40.0),
+          padding: const EdgeInsets.all(40.0),
           child: Form(
             key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 15.0),
+                const SizedBox(height: 15.0),
                 label("Username"),
-                SizedBox(height: 5.0),
+                const SizedBox(height: 5.0),
                 usernameField,
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 label("Password"),
-                SizedBox(height: 5.0),
+                const SizedBox(height: 5.0),
                 passwordField,
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 auth.loggedInStatus == Status.Authenticating
                     ? loading
                     : longButtons("Login", doLogin),
-                SizedBox(height: 5.0),
+                const SizedBox(height: 5.0),
                 forgotLabel
               ],
             ),

@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:sparse_gql_ci/util/widgets.dart';
 import 'package:flutter/material.dart';
 import '../lib/main.dart' as app;
 
@@ -26,7 +25,7 @@ void main() {
 
       // Trigger a frame.
       await tester.pumpAndSettle();
-      await tester.pump();
+
       // Verify we go to next frame
       expect(find.text('thomnico+b4p@gmail.com'), findsOneWidget);
     });

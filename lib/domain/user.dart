@@ -3,18 +3,19 @@ class User {
   String? email;
   bool? emailVerified;
   String? token;
-  String? sessionId;
+  // use objectId as it is the name returned by graphql for the session row in DB
+  String? objectId;
 
   User(
       {this.userId,
       this.email,
       this.emailVerified,
       this.token,
-      this.sessionId});
+      this.objectId});
 
   factory User.fromJson(Map<String?, dynamic> responseData) {
     return User(
-        sessionId: responseData['objectId'],
+        objectId: responseData['objectId'],
         userId: responseData['id'],
         email: responseData['email'],
         token: responseData['token'],

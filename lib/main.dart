@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
           home: GraphQLProvider(
-            child: MyHomePage(),
+            child: const MyHomePage(),
             client: client,
           ),
           routes: {
@@ -59,6 +59,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -83,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 default:
                   if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
