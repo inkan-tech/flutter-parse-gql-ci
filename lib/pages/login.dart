@@ -5,7 +5,9 @@ import '../providers/auth.dart';
 import '../providers/user_provider.dart';
 import '../util/widgets.dart';
 import 'package:provider/provider.dart';
+import '../util/shared_preference.dart';
 
+// TODO add a check for shared prefs then continue session
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -58,7 +60,8 @@ class _LoginState extends State<Login> {
         ),
         FlatButton(
           padding: const EdgeInsets.only(left: 0.0),
-          child: const Text("Sign up", style: TextStyle(fontWeight: FontWeight.w300)),
+          child: const Text("Sign up",
+              style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/register');
           },
@@ -93,6 +96,7 @@ class _LoginState extends State<Login> {
       }
     };
 
+    
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -122,5 +126,6 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+   
   }
 }

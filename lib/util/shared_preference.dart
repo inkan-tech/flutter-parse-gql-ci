@@ -44,9 +44,13 @@ class UserPreferences {
     return prefs.clear();
   }
 
-  Future<String> getToken() async {
+  Future<String?> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token").toString();
-    return token;
+    if ( token.length < 6 ) {
+      return null;
+    } else {
+      return token;
+    }
   }
 }

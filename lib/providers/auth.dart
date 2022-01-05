@@ -179,21 +179,29 @@ class AuthProvider with ChangeNotifier {
   	}
   }
   ''';
-    final User? user = await UserPreferences().getUser();
-
+    User? user = await UserPreferences().getUser();
+    if (user == null || user.objectId == null) {
+      result = Future<Map<String, dynamic>>.value(
+          {'status': true, 'message': 'already logoded out', 'data': null});
+      // Remove the session token to the graphql client
+      configuration.removeToken();
+      // Remove  the user in the sharedPreferences
+      UserPreferences().removeUser();
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+      return result;
+    }
     // here we suppose that the objectId of the session is set and correct.
     final QueryOptions options = QueryOptions(
       document: gql(logoutMutate),
       variables: <String, dynamic>{
-        'objectId': user!.objectId,
+        'objectId': user.objectId,
       },
     );
     GraphQLClient client = configuration.clientToQuery(
         sessionToken: await UserPreferences().getToken());
 
-    // Ensure the client is authenticated
-//    configuration.addToken(await UserPreferences().getToken());
-
+ 
     QueryResult logoutResult = await client.query(options);
 
     if (logoutResult.hasException) {
