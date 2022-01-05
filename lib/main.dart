@@ -49,9 +49,9 @@ class MyApp extends StatelessWidget {
             client: client,
           ),
           routes: {
-            '/dashboard': (context) => DashBoard(),
-            '/login': (context) => Login(),
-            '/register': (context) => Register(),
+            '/dashboard': (context) => const DashBoard(),
+            '/login': (context) => const Login(),
+            '/register': (context) => const Register(),
             '/logout': (context) => Logout(),
           }),
     );
@@ -92,12 +92,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   } else {
                     if ((snapshot.hasData && snapshot.data == null) ||
                         (!snapshot.hasData)) {
-                      return Login();
+                      return const Login();
                     } else {
                       UserPreferences().removeUser();
                     }
                   }
-                  return DashBoard();
+                  return const DashBoard();
               }
             }));
   }

@@ -67,7 +67,7 @@ class _RegisterState extends State<Register> {
           } else {
             Flushbar(
               title: "Registration Failed",
-              message: response.toString(),
+              message: response['error'].toString(),
               duration: const Duration(seconds: 10),
             ).show(context);
           }

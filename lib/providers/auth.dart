@@ -130,8 +130,11 @@ class AuthProvider with ChangeNotifier {
     if (signupResult.hasException) {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
-      result = Future<Map<String, dynamic>>.value(
-          {'status': false, 'message': signupResult.exception!.toString()});
+      result = Future<Map<String, dynamic>>.value({
+        'status': false,
+        'message': "a problem occurs while trying to signup",
+        'data': signupResult.exception!.toString()
+      });
     } else {
       // TODO get the objectId linked with the token or getuser
       // once logged in but might not be possible before emailVerified
@@ -162,47 +165,54 @@ class AuthProvider with ChangeNotifier {
     }
     return result;
   }
-//   static Future<FutureOr> onValue(Response response) async {
-//     var result;
-//     final Map<String, dynamic> responseData = json.decode(response.body);
-
-//     print(response.statusCode);
-//     if (response.statusCode == 200) {
-//       var userData = responseData['data'];
-
-//       User authUser = User.fromJson(userData);
-
-//       UserPreferences().saveUser(authUser);
-//       result = {
-//         'status': true,
-//         'message': 'Successfully registered',
-//         'data': authUser
-//       };
-//     } else {
-// //      if (response.statusCode == 401) Get.toNamed("/login");
-//       result = {
-//         'status': false,
-//         'message': 'Registration failed',
-//         'data': responseData
-//       };
-//     }
-
-//     return result;
-//   }
 
   /// see https://www.back4app.com/docs/parse-graphql/graphql-logout-mutation
   /// we can keep the id of the session which is different then the session.
-
-  String logoutMutate = ''' 
+  Future<Map<String, dynamic>> logout() async {
+    Future<Map<String, dynamic>> result;
+    //see https://www.back4app.com/docs/parse-graphql/graphql-logout-mutation
+    /// we can keep the id of the session which is different then the session.
+    String logoutMutate = ''' 
   mutation logOutButton (\$objectId: String!) {
 	logOut(input: { clientMutationId: \$objectId }) {
 		clientMutationId
   	}
   }
   ''';
+    final User? user = await UserPreferences().getUser();
 
-  static onError(error) {
-    print("the error is $error.detail");
-    return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
+    // here we suppose that the objectId of the session is set and correct.
+    final QueryOptions options = QueryOptions(
+      document: gql(logoutMutate),
+      variables: <String, dynamic>{
+        'objectId': user!.objectId,
+      },
+    );
+    GraphQLClient client = configuration.clientToQuery(
+        sessionToken: await UserPreferences().getToken());
+
+    // Ensure the client is authenticated
+//    configuration.addToken(await UserPreferences().getToken());
+
+    QueryResult logoutResult = await client.query(options);
+
+    if (logoutResult.hasException) {
+      result = Future<Map<String, dynamic>>.value({
+        'status': false,
+        'message': "a problem occurs while trying to logout",
+        'data': logoutResult.exception!.toString()
+      });
+    } else {
+      result = Future<Map<String, dynamic>>.value(
+          {'status': true, 'message': 'successfull logout', 'data': null});
+    }
+
+    // Remove the session token to the graphql client
+    configuration.removeToken();
+    // Remove  the user in the sharedPreferences
+    UserPreferences().removeUser();
+    _loggedInStatus = Status.NotLoggedIn;
+    notifyListeners();
+    return result;
   }
 }

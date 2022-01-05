@@ -72,10 +72,10 @@ class _LoginState extends State<Login> {
       if (form!.validate()) {
         form.save();
 
-        final Future<Map<String, dynamic>> successfulMessage =
+        final Future<Map<String, dynamic>> successfulLogin =
             auth.login(_username, _password);
 
-        successfulMessage.then((response) {
+        successfulLogin.then((response) {
           if (response['status']) {
             User user = response['user'];
             Provider.of<UserProvider>(context, listen: false).setUser(user);

@@ -9,10 +9,11 @@ class UserPreferences {
     prefs.setString("userId", user.userId as String);
     prefs.setString("email", user.email as String);
     prefs.setString("token", user.token as String);
-    prefs.setBool("emailVerified", user.emailVerified as bool);
+    // TODO check for Null also
+    (user.emailVerified != null)
+        ? prefs.setBool("emailVerified", user.emailVerified as bool)
+        : prefs.setBool("emailVerified", false);
     prefs.setString("objectId", user.objectId as String);
-
-    print("object prefered: " + user.toString());
 
     return prefs.commit();
   }
@@ -24,7 +25,7 @@ class UserPreferences {
     String? email = prefs.getString("email");
     String? token = prefs.getString("token");
     bool? emailVerified = prefs.getBool("emailVerified");
-    String? seesionId = prefs.getString("objectId");
+    String? objectId = prefs.getString("objectId");
 
     if (userId != null) {
       return User(
@@ -32,7 +33,7 @@ class UserPreferences {
           email: email,
           token: token,
           emailVerified: emailVerified,
-          objectId: seesionId);
+          objectId: objectId);
     } else {
       return null;
     }
@@ -43,7 +44,7 @@ class UserPreferences {
     return prefs.clear();
   }
 
-  Future<String> getToken(args) async {
+  Future<String> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token").toString();
     return token;
