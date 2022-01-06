@@ -7,7 +7,8 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('end-to-end test', () {
-    testWidgets('Test the login page', (WidgetTester tester) async {
+    testWidgets('Test the login / logout ', (WidgetTester tester) async {
+      /// assume there is a test/testtest user in the database.
       app.main();
       await tester.pumpAndSettle();
       expect(find.text('Username'), findsOneWidget);
@@ -28,6 +29,16 @@ void main() {
 
       // Verify we go to next frame
       expect(find.text('thomnico+b4p@gmail.com'), findsOneWidget);
+
+      // Then we logout
+      await tester.tap(find.byType(RaisedButton));
+      // TODO verify the database is empty
+
+      // Trigger a frame.
+      await tester.pumpAndSettle();
+
+      // check we are at login again
+      expect(find.text('Logged out'), findsNWidgets(2));
     });
   });
 }

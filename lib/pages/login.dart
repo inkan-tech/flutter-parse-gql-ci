@@ -96,7 +96,6 @@ class _LoginState extends State<Login> {
       }
     };
 
-    
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -126,6 +125,5 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
-   
   }
 }
