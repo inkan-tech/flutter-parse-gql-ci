@@ -1,4 +1,4 @@
-# sparse_gql_ci
+# parse_gql_ci
 
 A Flutter project that aims to provide a simple code/demo to achieve the following:
 
