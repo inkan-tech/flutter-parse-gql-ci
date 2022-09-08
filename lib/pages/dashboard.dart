@@ -18,7 +18,7 @@ class _DashBoardState extends State<DashBoard> {
     User user = Provider.of<UserProvider>(context).user;
     AuthProvider auth = Provider.of<AuthProvider>(context);
 
-    var doLogout = () {
+    doLogout() {
       final Future<Map<String, dynamic>> successfulLogout = auth.logout();
 
       successfulLogout.then((response) {
@@ -36,7 +36,7 @@ class _DashBoardState extends State<DashBoard> {
           ).show(context);
         }
       });
-    };
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -53,13 +53,14 @@ class _DashBoardState extends State<DashBoard> {
                   ? user.email as String
                   : "not logged in"))),
           const SizedBox(height: 100),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               doLogout();
               Navigator.pushReplacementNamed(context, '/logout');
             },
             child: const Text("Logout"),
-            color: Colors.lightBlueAccent,
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightBlueAccent),
           )
         ],
       ),

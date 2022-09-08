@@ -50,17 +50,15 @@ class _LoginState extends State<Login> {
     final forgotLabel = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        FlatButton(
-          padding: const EdgeInsets.all(0.0),
-          child: const Text("Forgot password?",
+        ElevatedButton(
+          child: Text("Forgot password?",
               style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
-//            Navigator.pushReplacementNamed(context, '/reset-password');
+            Navigator.pushReplacementNamed(context, '/reset-password');
           },
         ),
-        FlatButton(
-          padding: const EdgeInsets.only(left: 0.0),
-          child: const Text("Sign up",
+        ElevatedButton(
+          child: Text("Sign up",
               style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/register');

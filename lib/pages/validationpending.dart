@@ -15,12 +15,13 @@ class Logout extends StatelessWidget {
           ),
           Center(child: Text("Good Bye")),
           const SizedBox(height: 100),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               Navigator.pushReplacementNamed(context, '/login');
             },
             child: const Text("Login"),
-            color: Colors.lightBlueAccent,
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightBlueAccent),
           )
         ],
       ),

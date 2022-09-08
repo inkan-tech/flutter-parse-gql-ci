@@ -27,13 +27,13 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.4
-  provider: ^6.0.2
-  graphql_flutter: ^5.0.0
-  shared_preferences: ^2.0.11
+  cupertino_icons: ^1.0.5
+  provider: ^6.0.3
+  graphql_flutter: ^5.1.0
+  shared_preferences: ^2.0.15
   ## using a nullsafe version
-  another_flushbar: ^1.10.28
-  email_validator: ^2.0.1
+  another_flushbar: ^1.10.29
+  email_validator: ^2.1.17
   
 dev_dependencies:
   integration_test:

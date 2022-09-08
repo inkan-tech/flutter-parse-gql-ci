@@ -31,7 +31,7 @@ void main() {
       expect(find.text('thomnico+b4p@gmail.com'), findsOneWidget);
 
       // Then we logout
-      await tester.tap(find.byType(RaisedButton));
+      await tester.tap(find.byType(ElevatedButton));
       // TODO verify the database is empty
 
       // Trigger a frame.
