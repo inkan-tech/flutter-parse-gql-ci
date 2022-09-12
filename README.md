@@ -3,7 +3,7 @@
 A Flutter project that aims to provide a simple code/demo to achieve the following:
 
 - Login/Signup/logout state-managed
-- Sparse Back4app backend using GraphQL > 5.0 module
+- parse Back4app backend using GraphQL > 5.0 module
 - Tests of the functions
 - CI/CD of the tests
 

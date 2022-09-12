@@ -1,6 +1,6 @@
 {
-    "name": "sparse_gql_ci",
-    "short_name": "sparse_gql_ci",
+    "name": "parse_gql_ci",
+    "short_name": "parse_gql_ci",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

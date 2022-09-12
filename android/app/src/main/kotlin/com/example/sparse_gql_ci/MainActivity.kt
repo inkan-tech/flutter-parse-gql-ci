@@ -1,4 +1,4 @@
-package com.example.sparse_gql_ci
+package com.example.parse_gql_ci
 
 import io.flutter.embedding.android.FlutterActivity
 

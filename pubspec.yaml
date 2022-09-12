@@ -1,5 +1,5 @@
-name: sparse_gql_ci
-description: Sparse grapql demo for login/signup and tests
+name: parse_gql_ci
+description: parse grapql demo for login/signup and tests
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
