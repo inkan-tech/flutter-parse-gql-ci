@@ -25,6 +25,7 @@ class _LoginState extends State<Login> {
     AuthProvider auth = Provider.of<AuthProvider>(context);
 
     final usernameField = TextFormField(
+      key: const ValueKey('UsernameField'),
       autofocus: false,
       //  validator: validateEmail,
       onSaved: (value) => _username = value as String,
@@ -32,6 +33,7 @@ class _LoginState extends State<Login> {
     );
 
     final passwordField = TextFormField(
+      key: const ValueKey('PasswordField'),
       autofocus: false,
       obscureText: true,
       validator: (value) => value!.isEmpty ? "Please enter password" : null,
