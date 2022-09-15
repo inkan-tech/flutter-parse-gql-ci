@@ -23,7 +23,7 @@ class GraphQlConfiguration {
     }
 
     return GraphQLClient(
-      cache: GraphQLCache(store: HiveStore()),
+      cache: GraphQLCache(),
       link: httpLink,
     );
   }
