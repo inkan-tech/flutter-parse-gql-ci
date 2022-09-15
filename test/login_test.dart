@@ -28,7 +28,7 @@ class MockClient extends Mock implements GraphQLClient {
 
 class MockLink extends Mock implements HttpLink {}
 
-class MockQueryResult extends Mock implements QueryResult {} 
+class MockQueryResult extends Mock implements QueryResult {}
 
 class MockAuth extends Mock implements AuthProvider {
   @override
@@ -64,8 +64,24 @@ class MockAuth extends Mock implements AuthProvider {
       variables: <String, dynamic>{'username': username, 'password': password},
     );
     GraphQLClient client = configuration.clientToQuery();
-  //modif QueryResult
-    QueryResult loginResult = QueryResult(source : QueryResultSource.network , options: options, data: {'username': 'test', 'password': 'testtest'} ,);
+    //modif QueryResult
+    QueryResult loginResult = QueryResult(
+      source: QueryResultSource.network,
+      options: options,
+      data: {
+        "logIn": {
+          "viewer": {
+            'user': {
+              "objectId": "aaabbb",
+              "id": "bbbbbbbbbccccc",
+              "emailVerified": true,
+              "email": "thomnico+b4p@gmail.com"
+            },
+            'sessionToken': 'testtest'
+          }
+        }
+      },
+    );
 
     if (loginResult.hasException) {
       _loggedInStatus = Status.NotLoggedIn;
@@ -103,7 +119,6 @@ class MockAuth extends Mock implements AuthProvider {
     }
     return result;
   }
-  
 }
 
 void main() {
@@ -133,8 +148,7 @@ void main() {
               ),
             )))));
 
-    await tester.enterText(
-        find.byKey(const ValueKey('UsernameField')), 'test');
+    await tester.enterText(find.byKey(const ValueKey('UsernameField')), 'test');
 
     await tester.enterText(
         find.byKey(const ValueKey('PasswordField')), 'testtest');
